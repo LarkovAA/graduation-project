@@ -1,0 +1,119 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block title %}
+{% if name %}
+<title>Внесите данные о {{ name }}</title>
+{% else %}
+<title>Внесите данные</title>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if empty_keys %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Не заполнены следующие поля:</strong> {{empty_keys}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %}
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="text-center">
+                <h1>Информация о профиле</h1>
+                <div class="col-md-12 mb-4 element-animate fadeInUp element-animated">
+                    <img src="{{ profile_form_url.url }}"
+                         alt="Image Placeholder"
+                         width="640"
+                         height="480"
+                         class="img-fluid rounded-circle">
+                </div>
+                <br><br>
+                <h2> {{ profile_form.first_name.value}} {{ profile_form.last_name.value }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="row blog-entries">
+        <div class="col-md-12 col-lg-12 main-content">
+            <form action="{% url 'profiles:update' user.id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="col-md-7 mx-auto">
+                    <tr>
+                        <div class="text-center">
+                            <th>
+                                <label>Загрузить новое фото (4:3)</label>
+                            </th>
+                        </div>
+                        <td>
+                            <input type="file"
+                                   class="form-control"
+                                   name="{{profile_form.image.name}}"
+                                   accept="image/*"
+                                   id="{{profile_form.id_image.label}}">
+                        </td>
+                    </tr>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <tr>
+                            <th><label for="{{profile_form.id_first_name.label}}">Имя</label></th>
+                            <td><input type="text"
+                                       class="form-control "
+                                       name="{{profile_form.first_name.name}}"
+                                       value="{{profile_form.first_name.value}}"
+                                       maxlength="50"
+                                       id="{{profile_form.id_first_name.label}}"></td>
+                        </tr>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <tr>
+                            <th><label for="{{profile_form.last_name.label}}">Фамилия</label></th>
+                            <td><input type="text"
+                                       class="form-control "
+                                       name="{{profile_form.last_name.name}}"
+                                       value="{{profile_form.last_name.value}}"
+                                       maxlength="50"
+                                       id="{{profile_form.last_name.label}}"></td>
+                        </tr>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <tr>
+                            <th><label for="{{profile_form.age.label}}">Возраст</label></th>
+                            <td><input type="number"
+                                       class="form-control "
+                                       name="{{profile_form.age.name}}"
+                                       value="{{profile_form.age.value}}"
+                                       maxlength="50"
+                                       id="{{profile_form.age.label}}"></td>
+                        </tr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <tr>
+                            <th><label for="{{profile_form.id_text.label}}">О себе</label></th>
+                            <td><textarea name="{{profile_form.text.name}}"
+                                          class="form-control "
+                                          cols="40"
+                                          rows="10"
+                                          id="{{profile_form.id_text.label}}">{{profile_form.text.value}}</textarea>
+                            </td>
+                        </tr>
+                        <br>
+                        <input class="btn btn-success" type="submit" value="Сохранить изменения профиля">
+                    </div>
+                </div>
+            </form>
+            <div class="col-md-6 form-group">
+                <a href="{% url 'blogpost_create' %}" class="btn-group-toggle">Создать новую статью</a>
+            </div>
+            <div class="col-md-6 form-group">
+                <a href="{% url 'blogpost' %}" class="btn-group-toggle">Посмотреть мои статьи</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
